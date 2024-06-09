@@ -1,0 +1,74 @@
+[
+  {
+    "cif": "aaabbb16",
+    "industry": "aaa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb18",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb17",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb22",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb25",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb26",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  },
+  {
+    "cif": "aaabbb21",
+    "industry": "industry",
+    "phoneNumber": "1210756870",
+    "countryCode": "+20",
+    "commercialName": "zee",
+    "email": "mm@mm.mm"
+  },
+  {
+    "cif": "aaabbb19",
+    "industry": "industry",
+    "phoneNumber": "1210756870",
+    "countryCode": "+20",
+    "commercialName": "zee",
+    "email": "mm@mm.mm"
+  },
+  {
+    "cif": "aaabbb28",
+    "industry": "aasa",
+    "phoneNumber": "1000000000",
+    "countryCode": "+20",
+    "commercialName": "xc",
+    "email": "jj@jj.jj"
+  }
+]
