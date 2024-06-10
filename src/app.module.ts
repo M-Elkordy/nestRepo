@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MerchantModule } from './merchant/merchant.module';
+import { MerchantModule } from './modules/merchant/merchant.module';
 import { UploadFileController } from './upload-file/upload-file.controller';
 import { UploadFileModule } from './upload-file/upload-file.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
+import { User } from './modules/users/user.entity';
 import { Report } from './reports/report.entity';
 
 
