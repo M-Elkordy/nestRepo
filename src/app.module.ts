@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MerchantModule } from './merchant/merchant.module';
@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Report } from './reports/report.entity';
+import { MorganMiddleware } from './middlewares/morgan.middleware';
 
 
 @Module({
@@ -23,4 +24,8 @@ import { Report } from './reports/report.entity';
   controllers: [AppController, UploadFileController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consuer: MiddlewareConsumer) {
+    consuer.apply(MorganMiddleware).forRoutes('*');
+  }
+}

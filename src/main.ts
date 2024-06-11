@@ -22,7 +22,7 @@ async function bootstrap() {
   // app.useGlobalPipes(new CustomValidationPipe());
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new AllExceptionFilter());
-  app.use(new MorganMiddleware().use);
+  // app.use(new MorganMiddleware().use);
   await app.listen(port);
 }
 bootstrap();
