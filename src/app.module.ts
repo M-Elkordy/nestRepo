@@ -15,11 +15,10 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
   imports: [MerchantModule, UploadFileModule, UsersModule, 
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'db.sqlite',
+      database: 'data/db.sqlite',
       entities: [User, Report],
       synchronize: true,
     }), 
-
   ],
   controllers: [AppController, UploadFileController],
   providers: [AppService],

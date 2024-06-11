@@ -3,7 +3,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdatedUserDto } from './dtos/update-user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { UserDto } from './dtos/user.dto';
+import { MerchantDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CustomUser } from './decorators/custom-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
@@ -11,14 +11,13 @@ import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
-@Serialize(UserDto)
-// @UseInterceptors(CurrentUserInterceptor)
+@Serialize(MerchantDto)
 export class UsersController {
     constructor(private usersService: UsersService, private authService: AuthService) { }
 
     @Post('signup')
     async createUser(@Body() body: CreateUserDto, @Session() session: any ) {
-        const user = await this.authService.signUp(body.email, body.password);
+        const user = await this.authService.signUp(body);
         session.userId = user.id;
         return user;
     }
@@ -31,7 +30,6 @@ export class UsersController {
     }
 
     @Get('/whoami')
-    @UseGuards(AuthGuard)
     whoAmI(@CustomUser() user: User) {
         return user;
     }
@@ -42,8 +40,6 @@ export class UsersController {
         return "signed out";
     }
 
-    // @UseInterceptors(ClassSerializerInterceptor)
-    //@UseInterceptors(new SerializeInterceptor(UserDto))
     @Get('/:id')
     findUser(@Param('id') id: string) {
         return this.usersService.findOne(parseInt(id));

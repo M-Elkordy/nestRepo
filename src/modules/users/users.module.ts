@@ -6,6 +6,8 @@ import { User } from './user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './constants/auth.constant';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -16,7 +18,12 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     {
       provide: APP_INTERCEPTOR,
       useClass: CurrentUserInterceptor
-    }
+    },
+    JwtModule.register({
+      global: true,
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '60s' }
+    })
   ]
 })
 export class UsersModule {}
