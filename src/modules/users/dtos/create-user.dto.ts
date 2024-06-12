@@ -14,7 +14,7 @@ export class CreateUserDto {
     @Length(4, 12)
     userName: string;
 
-    @IsString()
+    @IsString() 
     fullName: string;
 
     @IsMobilePhone('ar-EG', { strictMode: false }, { message: 'Invalid phone number', each: true})
