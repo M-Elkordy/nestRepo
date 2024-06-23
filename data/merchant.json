@@ -1,0 +1,34 @@
+[
+  {
+    "email": "something12@test.com",
+    "cif": "12345679",
+    "industry": "communications",
+    "phoneNumber": "1029389447",
+    "countryCode": "+20",
+    "commercialName": "Test1"
+  },
+  {
+    "email": "ahmed@test.com",
+    "cif": "12345649",
+    "industry": "communications",
+    "phoneNumber": "1029389447",
+    "countryCode": "+20",
+    "commercialName": "Test1"
+  },
+  {
+    "email": "khaled@test.com",
+    "cif": "12345640",
+    "industry": "communications",
+    "phoneNumber": "1029389447",
+    "countryCode": "+20",
+    "commercialName": "Test1"
+  },
+  {
+    "email": "ibrahim@test.com",
+    "cif": "12345110",
+    "industry": "communications",
+    "phoneNumber": "1029389447",
+    "countryCode": "+20",
+    "commercialName": "Test1"
+  }
+]

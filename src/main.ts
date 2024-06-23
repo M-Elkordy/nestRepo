@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { CustomValidationPipe } from './merchant/pipes/validation.pipe';
+import { CustomValidationPipe } from './modules/merchant/pipes/validation.pipe';
 import { port } from './config';
 import { AllExceptionFilter } from './all-exceptions.filter';
-import { ResponseInterceptor } from './merchant/response.interceptor';
+import { ResponseInterceptor } from './modules/merchant/response.interceptor';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { ValidationPipe } from '@nestjs/common';
 const cookieSession = require('cookie-session');
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,7 +23,8 @@ async function bootstrap() {
   // app.useGlobalPipes(new CustomValidationPipe());
   app.useGlobalInterceptors(new ResponseInterceptor());
   app.useGlobalFilters(new AllExceptionFilter());
-  app.use(new MorganMiddleware().use);
+  // app.use(new MorganMiddleware().use);
   await app.listen(port);
 }
+
 bootstrap();

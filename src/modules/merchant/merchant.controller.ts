@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, HttpStatus, Next, Param, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Next, Param, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { CustomValidationPipe } from './pipes/validation.pipe';
 import { UserDto } from './dtos/user.dto';
 import { MerchantService } from './merchant.service';
 import { NextFunction, Response } from 'express';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('merchant')
+@UseGuards(AuthGuard)
 export class MerchantController {
     constructor( private merchantervice: MerchantService ) {}
 
