@@ -2,22 +2,24 @@ import { readFileSync, writeFileSync } from "fs";
 import * as fs from 'fs';
 import { UserDto } from "./dtos/user.dto";
 import { Injectable } from "@nestjs/common";
+import { merchantDocumnet } from "./entities/merchant.schema";
 
 
 export interface DataSource {
-    getMerchants: () => UserDto[];
-    addMerchant: (data: UserDto) => void;
-    updateMerchat: (merchantUser: UserDto, userCif: string) => UserDto[];
-    deleteMerchant: (userCif: string) => UserDto[];
+    getMerchants: () => Promise<merchantDocumnet[]>;
+    addMerchant: (data: UserDto) => Promise<void>;
+    updateMerchat: (merchantUser: UserDto, userCif: string) => Promise<merchantDocumnet[]>;
+    deleteMerchant: (userCif: string) => Promise<merchantDocumnet[]>;
 }
 
 @Injectable()
-export class JsonFileRepository implements DataSource {
+export class JsonFileRepository {
     constructor(private filePath: string) {}
 
-    getMerchants() : UserDto[] {
+    async getMerchants() : Promise<UserDto[]> {
         try {
             const data = readFileSync(this.filePath, 'utf-8');
+            console.log(data);
             if(data) {
                 const jsonData: UserDto[] = JSON.parse(data) as UserDto[];
                 return jsonData;
@@ -36,17 +38,17 @@ export class JsonFileRepository implements DataSource {
         }
     };
 
-    addMerchant(data: UserDto) : void {
-        let allData = this.getMerchants();
+    async addMerchant(data: UserDto) : Promise<void> {
+        let allData = await this.getMerchants();
         allData.push(data);
         fs.writeFile(this.filePath, JSON.stringify(allData, null, 2), err => {
             err ? console.log(err) : console.log("file written successfully");
         });
     };
 
-    updateMerchat(merchantUser: UserDto, userCif: string): UserDto[] {
+    async updateMerchat(merchantUser: UserDto, userCif: string): Promise<UserDto[]> {
         try {
-            let data = this.getMerchants();
+            let data = await this.getMerchants();
             const newData = data.filter(user => user.cif !== userCif);
             merchantUser.cif = userCif;
             const updatedData = [...newData, merchantUser];
@@ -57,14 +59,14 @@ export class JsonFileRepository implements DataSource {
         }
     };
     
-    deleteMerchant(userCif: string): UserDto[] {
-        let data = this.getMerchants();
+    async deleteMerchant(userCif: string): Promise<UserDto[]> {
+        let data = await this.getMerchants();
         if(data.length > 0) {
             const newData = data.filter(user => user.cif !== userCif);
             fs.writeFile(this.filePath, JSON.stringify(newData, null, 2), err => {
                 err ? console.log(err) : console.log("file written successfully");
             })
-            return newData;
+            return newData; 
         }
         return [];
     };

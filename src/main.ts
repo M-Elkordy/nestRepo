@@ -8,6 +8,7 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { ValidationPipe } from '@nestjs/common';
 const cookieSession = require('cookie-session');
 
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieSession({
@@ -25,4 +26,5 @@ async function bootstrap() {
   // app.use(new MorganMiddleware().use);
   await app.listen(port);
 }
+
 bootstrap();

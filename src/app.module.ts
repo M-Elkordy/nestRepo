@@ -9,20 +9,31 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './modules/users/user.entity';
 import { Report } from './reports/report.entity';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
+import { MongooseModule } from '@nestjs/mongoose';
 
 
 @Module({
-  imports: [MerchantModule, UploadFileModule, UsersModule, 
+  imports: [
+    MerchantModule, 
+    UploadFileModule, 
+    UsersModule, 
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'data/db.sqlite',
       entities: [User, Report],
       synchronize: true,
     }), 
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'),
   ],
-  controllers: [AppController, UploadFileController],
-  providers: [AppService],
+  controllers: [
+    AppController, 
+    UploadFileController
+  ],
+  providers: [
+    AppService
+  ],
 })
+
 export class AppModule implements NestModule {
   configure(consuer: MiddlewareConsumer) {
     consuer.apply(MorganMiddleware).forRoutes('*');

@@ -9,6 +9,7 @@ import { CustomUser } from './decorators/custom-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { SignInUserDto } from './dtos/signIn-user.dto';
 
 @Controller('auth')
 @Serialize(MerchantDto)
@@ -16,19 +17,18 @@ export class UsersController {
     constructor(private usersService: UsersService, private authService: AuthService) { }
 
     @Post('signup')
-    async createUser(@Body() body: CreateUserDto, @Session() session: any ) {
+    async createUser(@Body() body: CreateUserDto) {
         const user = await this.authService.signUp(body);
-        session.userId = user.id;
         return user;
     }
 
     @Post('/signin')
-    async signIn(@Body() body: CreateUserDto, @Session() session: any) {
+    async signIn(@Body() body: SignInUserDto) {
         const user = await this.authService.signIn(body.email, body.password);
-        session.userId = user.id;
-        return user;
+        return user.access_token;
     }
 
+    @UseGuards(AuthGuard)
     @Get('/whoami')
     whoAmI(@CustomUser() user: User) {
         return user;
@@ -37,12 +37,12 @@ export class UsersController {
     @Post('/signout')
     signOut(@Session() session: any) {
         session.userId = null;
-        return "signed out";
+        return "signed out"; 
     }
 
     @Get('/:id')
     findUser(@Param('id') id: string) {
-        return this.usersService.findOne(parseInt(id));
+        return this.usersService.findOne(id);
     }
 
     @Get()
@@ -52,11 +52,11 @@ export class UsersController {
 
     @Delete('/:id')
     deleteUser(@Param('id') id: string) {
-        this.usersService.delete(parseInt(id));
+        this.usersService.delete(id);
     }
 
     @Patch('/:id')
     updateUser(@Param('id') id: string, @Body() body: UpdatedUserDto) {
-        this.usersService.update(parseInt(id), body);
+        this.usersService.update(id, body);
     }
 }

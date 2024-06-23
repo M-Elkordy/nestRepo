@@ -27,5 +27,4 @@ export class AllExceptionFilter implements ExceptionFilter {
 
         res.status(status).json(errorResponse);
     }
-    
 }

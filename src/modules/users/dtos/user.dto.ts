@@ -2,11 +2,14 @@ import { Expose } from "class-transformer";
 
 
 export class MerchantDto {
-    @Expose()
-    id: number;
+    // @Expose()
+    // id: number;
 
     @Expose()
     email: string;
+
+    @Expose()
+    password: string;
 
     @Expose()
     passwordConfirmation: string;

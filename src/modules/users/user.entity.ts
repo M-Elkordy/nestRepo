@@ -1,5 +1,3 @@
-import { Exclude } from "class-transformer";
-import { IsEmail, IsString } from "class-validator";
 import { AfterInsert, AfterRemove, AfterUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -13,6 +11,15 @@ export class User {
     @Column()
     // @Exclude()
     password: string;
+    
+    @Column()
+    userName: string;
+
+    @Column()
+    fullName: string;
+
+    @Column()
+    phoneNumber: string;
 
     @AfterInsert()
     logInsert() {

@@ -1,41 +1,43 @@
-import { BadRequestException, Injectable, Next } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, Next } from '@nestjs/common';
 import { UserDto } from './dtos/user.dto';
-import { JsonFileRepository } from './merchant.repository';
-import { Request, Response, NextFunction } from 'express';
+import { DataSource } from './merchant.repository';
 
 
 @Injectable()
 export class MerchantService {
-    constructor(private jsonfileRepo: JsonFileRepository) {}
+    constructor(
+        @Inject("DataSource") private repo: DataSource
+    ) {}
 
-    doesCifExists(cif: string): boolean {
-        const data = this.jsonfileRepo.getMerchants() as UserDto[];
-        if(data === undefined) return false;
+    async doesCifExists(cif: string): Promise<boolean> {
+        const data = await this.repo.getMerchants();
+        if(data.length === 0) return false;
         const foundData = data.some(obj => obj.cif === cif);
         return foundData;
     }
 
     sendMerchantsArray() {
-        const merchants = this.jsonfileRepo.getMerchants();
+        const merchants = this.repo.getMerchants();
         return merchants;
     }
 
-    addNewMerchant(body: UserDto) {
-        const cifFound = this.doesCifExists(body.cif);
+    async addNewMerchant(body: UserDto) {
+        const cifFound = await this.doesCifExists(body.cif);
+        console.log(cifFound);
         if(cifFound) throw new BadRequestException("cif already found");
-        this.jsonfileRepo.addMerchant(body);
+        this.repo.addMerchant(body);
         return body;    
     }
 
-    updateMerchantInfo(body: UserDto, cif: string) {
-        const cifFound = this.doesCifExists(cif);
+    async updateMerchantInfo(body: UserDto, cif: string) {
+        const cifFound = await this.doesCifExists(cif);
         if(!cifFound) throw new BadRequestException("cif entererd does not exist!");
-        this.jsonfileRepo.updateMerchat(body, cif);
+        this.repo.updateMerchat(body, cif);
     }
 
-    deleteMerchant(cif: string) {
-        const cifFound = this.doesCifExists(cif);
+    async deleteMerchant(cif: string) {
+        const cifFound = await this.doesCifExists(cif);
         if(!cifFound) throw new BadRequestException("cif entererd does not exist!");
-        return this.jsonfileRepo.deleteMerchant(cif);
+        return this.repo.deleteMerchant(cif);
     }
 }

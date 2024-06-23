@@ -1,20 +1,21 @@
-import { IsString, IsEmail, Length, Matches, IsNumberString, IsMobilePhone } from 'class-validator';
+import { IsString, IsEmail, Length, Matches, IsNumberString, IsMobilePhone, Equals } from 'class-validator';
 
 export class CreateUserDto {
-    @IsEmail()
+    @IsEmail({}, {message: 'email'})
     email: string;
 
-    @IsString()
+    @IsString({ message: 'password'})
     password: string;
 
-    @Matches('password')
+    // @Matches('password', '', {message: 'confirm'})
+    @IsString({ message: 'confirmPaswword'})
     passwordConfirmation: string;
 
-    @IsString()
-    @Length(4, 12)
+    @IsString({ message: 'username = string' })
+    @Length(4, 12, { message: 'username = length'})
     userName: string;
 
-    @IsString() 
+    @IsString({message: 'fullname'}) 
     fullName: string;
 
     @IsMobilePhone('ar-EG', { strictMode: false }, { message: 'Invalid phone number', each: true})
