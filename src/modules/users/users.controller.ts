@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Param, Query, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Param, Query, Delete, Patch, UseInterceptors, ClassSerializerInterceptor, Session, UseGuards, } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { UpdatedUserDto } from './dtos/update-user.dto';
@@ -10,9 +10,10 @@ import { CurrentUserInterceptor } from './interceptors/current-user.interceptor'
 import { User } from './user.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { SignInUserDto } from './dtos/signIn-user.dto';
+import { CreatePayerDto } from './dtos/create-payer.dto';
 
 @Controller('auth')
-@Serialize(MerchantDto)
+// @Serialize(MerchantDto)
 export class UsersController {
     constructor(private usersService: UsersService, private authService: AuthService) { }
 
@@ -59,4 +60,40 @@ export class UsersController {
     updateUser(@Param('id') id: string, @Body() body: UpdatedUserDto) {
         this.usersService.update(id, body);
     }
+
+    /************************************* Payers *****************************************/
+
+    @UseGuards(AuthGuard)
+    @Post('/payers')
+    createPayer(@Body() body: CreatePayerDto) {
+        this.usersService.createPayer(body);
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('auth/payers')
+    getPayers(@Query('page') page: number, @Query('limit') limit: number, @Query('search') search?: string) {
+        return this.usersService.getPayers(page, limit, search);
+    }
 }
+
+/***************************** How to get the values of Merchant and User in each Payer *****************************/
+// db.payers.aggregate([
+//     {
+//         $lookup: 
+//             {
+//                 from: "merchants",
+//                 localField: "merchantId",
+//                 foreignField: "_id",
+//                 as: "Merchants"
+//             } 
+//     },
+//     {
+//         $lookup:
+//             {
+//                 from: "users",
+//                 localField: "userId",
+//                 foreignField: "_id",
+//                 as: "Users"
+//             } 
+//     }
+// ])

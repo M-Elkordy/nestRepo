@@ -17,7 +17,7 @@ export class User {
     userName: String;
     @Prop({ required: true, })
     password: String;
-    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Payer" })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Payer" }]})
     payer: Payer
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Merchant" })
     merchant: Merchant

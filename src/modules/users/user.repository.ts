@@ -2,6 +2,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User, UserDocument } from './entity/user.schema';
 import { Model } from 'mongoose';
+import { CreatePayerDto } from './dtos/create-payer.dto';
+import { Payer, PayerDocument } from './entity/payer.schema';
+import { BadRequestException } from '@nestjs/common';
 
 
 export interface DataSource {
@@ -10,11 +13,14 @@ export interface DataSource {
     create: ( createdUser: CreateUserDto ) => Promise<UserDocument>;
     updateUser: ( user: UserDocument ) => Promise<void>;
     remove: (id: string) => void;
+    createPayer: (payer: CreatePayerDto) => Promise<PayerDocument>;
+    getPayersList: (page: number, limit: number, search: string) => Promise<Payer[]>;
 }
 
 export class UserMongoRepository implements DataSource {
     constructor(
-        @InjectModel(User.name) private userModel: Model<User>
+        @InjectModel(User.name) private userModel: Model<User>,
+        @InjectModel(Payer.name) private payerModel: Model<Payer>
     ) { }
 
     async findOneBy(id: string) : Promise<UserDocument> {
@@ -44,4 +50,42 @@ export class UserMongoRepository implements DataSource {
     async remove(id: string) : Promise<void> {
         await this.userModel.deleteOne({ _id: id });
     };
+
+    /************************************* Payers *****************************************/
+
+    async createPayer(payer: CreatePayerDto): Promise<PayerDocument> {
+        try {
+            // const x = await this.payerModel.aggregate([
+            //     { $group: {
+            //         _id: {
+            //             x: "$fullName", y: "$email" 
+            //         },
+            //         count: { $sum: 1 }
+            //     } }
+            // ]);
+            // console.log(x)
+            return await this.payerModel.create(payer);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async getPayersList(page: number, limit: number, search: string) : Promise<Payer[]> {
+        const payersCount = await this.payerModel.countDocuments();
+        const skip = (page - 1) * limit;
+        let query = {};
+        if(search) {
+            query = {
+                $or: [
+                    { fullName: { $regex: search, $options: 'i' } }, 
+                    { email: { $regex: search, $options: 'i' } }
+                ]
+            }
+        }
+        if( skip >= payersCount ) {
+            throw new BadRequestException("no more payers in this page")
+        }
+        const data = await this.payerModel.find(query).sort().skip(skip).limit(limit)
+        return data;
+    }
 }
