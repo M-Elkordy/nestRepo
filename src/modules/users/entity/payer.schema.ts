@@ -28,10 +28,10 @@ export class Payer {
     };
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User"})
-    user: User;
+    userId: mongoose.schema.Types.ObjectId;
     
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Merchant' })
-    merchant: Merchant;
+    merchantId: mongoose.schema.Types.ObjectId;
 }
 
 export const PayerSchema = SchemaFactory.createForClass(Payer);
