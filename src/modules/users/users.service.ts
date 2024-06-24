@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DataSource } from './user.repository';
+import { CreatePayerDto } from './dtos/create-payer.dto';
 
 @Injectable()
 export class UsersService {
@@ -38,5 +39,15 @@ export class UsersService {
             throw new NotFoundException('User Not Found!');
         }
         return this.repo.remove(id);
+    }
+
+    /************************************* Payers *****************************************/
+
+    createPayer(payer: CreatePayerDto) {
+        return this.repo.createPayer(payer);
+    }
+
+    getPayers(page: number, limit: number, search?: string) {
+        return this.repo.getPayersList(page, limit, search);
     }
 }

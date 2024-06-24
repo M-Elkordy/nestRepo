@@ -2,24 +2,39 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { User } from "./user.schema";
 import { Merchant } from "../../merchant/entities/merchant.schema";
+import { IsEmail } from "class-validator";
 
 export type PayerDocument = HydratedDocument<Payer>
+
+export enum currency {
+    EGP = 'EGP',
+    USD = 'USD',
+    AED = 'AED'
+}
 
 @Schema()
 export class Payer {
     @Prop({ required: true })
-    id: Number;
-
-    @Prop({ required: true })
     fullName: String;
 
-    @Prop({ required: true })
+    @Prop({ required: true, validate: [ IsEmail, 'Invalid Email' ] })
     email: String;
 
     @Prop({ required: true, 
+        _id: false,
         type: {
-            amount: { type: Number },
-            currency: { type: String }
+            amount: { 
+                type: Number, 
+                validate: {
+                    validator: (val: number) => val > 0,
+                    message: 'Amount must be positive'
+                }
+            },
+            currency: { 
+                type: String,
+                enum: Object.values(currency),
+                required: true
+            }
         } 
     })
     dept: {
@@ -28,10 +43,10 @@ export class Payer {
     };
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "User"})
-    userId: mongoose.schema.Types.ObjectId;
+    userId: User;
     
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Merchant' })
-    merchantId: mongoose.schema.Types.ObjectId;
+    merchantId: Merchant;
 }
 
 export const PayerSchema = SchemaFactory.createForClass(Payer);

@@ -12,6 +12,7 @@ import { JwtTokenService } from './jwtToken.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User as UserName, UserSchema } from './entity/user.schema';
 import { UserMongoRepository } from './user.repository';
+import { Payer, PayerSchema } from './entity/payer.schema';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserMongoRepository } from './user.repository';
       signOptions: { expiresIn: '6000s' }
     }),
     MongooseModule.forFeature([{ name: UserName.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: Payer.name, schema: PayerSchema}])
   ],
   controllers: [UsersController],
   providers: [
