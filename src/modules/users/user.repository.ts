@@ -15,6 +15,7 @@ export interface DataSource {
     remove: (id: string) => void;
     createPayer: (payer: CreatePayerDto) => Promise<PayerDocument>;
     getPayersList: (page: number, limit: number, search: string) => Promise<Payer[]>;
+    getTotalDept: (cif: string, fullName: string) => void;
 }
 
 export class UserMongoRepository implements DataSource {
@@ -55,15 +56,6 @@ export class UserMongoRepository implements DataSource {
 
     async createPayer(payer: CreatePayerDto): Promise<PayerDocument> {
         try {
-            // const x = await this.payerModel.aggregate([
-            //     { $group: {
-            //         _id: {
-            //             x: "$fullName", y: "$email" 
-            //         },
-            //         count: { $sum: 1 }
-            //     } }
-            // ]);
-            // console.log(x)
             return await this.payerModel.create(payer);
         } catch (error) {
             return error;
@@ -87,5 +79,30 @@ export class UserMongoRepository implements DataSource {
         }
         const data = await this.payerModel.find(query).sort().skip(skip).limit(limit)
         return data;
+    }
+
+    async getTotalDept(cif: string, fullName: string) {
+        return await this.payerModel.aggregate([
+            {
+                $lookup: {
+                    from: 'merchants',
+                    localField: 'merchantId',
+                    foreignField: '_id',
+                    as: 'merchants'
+                }
+            },
+            {
+                $match: {
+                    'merchants.cif': cif,
+                    fullName: new RegExp(fullName, 'i')
+                }
+            },
+            {
+                $group: {
+                    _id: "$dept.currency",
+                    totalDept: { $sum: "$dept.amount" }
+                }
+            }
+        ])
     }
 }

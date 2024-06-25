@@ -50,4 +50,8 @@ export class UsersService {
     getPayers(page: number, limit: number, search?: string) {
         return this.repo.getPayersList(page, limit, search);
     }
+
+    getTotalDept(cif: string, fullName: string) {
+        return this.repo.getTotalDept(cif, fullName);
+    }
 }
