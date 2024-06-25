@@ -10,6 +10,8 @@ import { User } from './modules/users/user.entity';
 import { Report } from './reports/report.entity';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
+import { PayersModule } from './modules/payers/payers.module';
+import { PayersService } from './modules/payers/payers.service';
 
 
 @Module({
@@ -23,14 +25,15 @@ import { MongooseModule } from '@nestjs/mongoose';
       entities: [User, Report],
       synchronize: true,
     }), 
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'),
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'), PayersModule,
   ],
   controllers: [
     AppController, 
     UploadFileController
   ],
   providers: [
-    AppService
+    AppService,
+    PayersService
   ],
 })
 
