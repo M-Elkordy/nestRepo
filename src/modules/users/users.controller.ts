@@ -16,46 +16,54 @@ import { CreatePayerDto } from './dtos/create-payer.dto';
 // @Serialize(MerchantDto)
 export class UsersController {
     constructor(private usersService: UsersService, private authService: AuthService) { }
-
+    
+    @Serialize(MerchantDto)
     @Post('signup')
     async createUser(@Body() body: CreateUserDto) {
         const user = await this.authService.signUp(body);
         return user;
     }
-
+    
+    @Serialize(MerchantDto)
     @Post('/signin')
     async signIn(@Body() body: SignInUserDto) {
         const user = await this.authService.signIn(body.email, body.password);
         return user.access_token;
     }
-
+    
+    @Serialize(MerchantDto)
     @UseGuards(AuthGuard)
     @Get('/whoami')
     whoAmI(@CustomUser() user: User) {
         return user;
     }
-
+    
+    @Serialize(MerchantDto)
     @Post('/signout')
     signOut(@Session() session: any) {
         session.userId = null;
         return "signed out"; 
     }
-
+    
+    @Serialize(MerchantDto)
     @Get('/:id')
     findUser(@Param('id') id: string) {
         return this.usersService.findOne(id);
     }
-
+    
+    @Serialize(MerchantDto)
     @Get()
     findAllUsers(@Query('email') query: string) {
         return this.usersService.find(query);
     }
 
+    @Serialize(MerchantDto)
     @Delete('/:id')
     deleteUser(@Param('id') id: string) {
         this.usersService.delete(id);
     }
 
+    @Serialize(MerchantDto)
     @Patch('/:id')
     updateUser(@Param('id') id: string, @Body() body: UpdatedUserDto) {
         this.usersService.update(id, body);
@@ -73,6 +81,13 @@ export class UsersController {
     @Get('auth/payers')
     getPayers(@Query('page') page: number, @Query('limit') limit: number, @Query('search') search?: string) {
         return this.usersService.getPayers(page, limit, search);
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('/auths/totaldebt')
+    getTotalDept(@Query('cif') cif: string, @Query('fullName') fullName: string) {
+        console.log(`${cif}, ${fullName}`);
+        return this.usersService.getTotalDept(cif, fullName);
     }
 }
 
