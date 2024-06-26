@@ -25,7 +25,8 @@ import { PayersService } from './modules/payers/payers.service';
       entities: [User, Report],
       synchronize: true,
     }), 
-    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'), PayersModule,
+    MongooseModule.forRoot('mongodb://127.0.0.1:27017/test'), 
+    PayersModule,
   ],
   controllers: [
     AppController, 
@@ -33,7 +34,6 @@ import { PayersService } from './modules/payers/payers.service';
   ],
   providers: [
     AppService,
-    PayersService
   ],
 })
 

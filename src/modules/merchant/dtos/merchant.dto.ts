@@ -1,7 +1,7 @@
 import { IsString, Length, Equals, IsAlpha, IsNumberString, IsEmail } from "class-validator";
 
 
-export class UserDto {
+export class MerchantDto {
     @IsString()
     @Length(8, 8)
     cif: string;
