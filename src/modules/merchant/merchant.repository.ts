@@ -1,14 +1,14 @@
 import { readFileSync, writeFileSync } from "fs";
 import * as fs from 'fs';
-import { UserDto } from "./dtos/user.dto";
+import { MerchantDto } from "./dtos/merchant.dto";
 import { Injectable } from "@nestjs/common";
 import { merchantDocumnet } from "./entities/merchant.schema";
 
 
 export interface DataSource {
     getMerchants: () => Promise<merchantDocumnet[]>;
-    addMerchant: (data: UserDto) => Promise<void>;
-    updateMerchat: (merchantUser: UserDto, userCif: string) => Promise<merchantDocumnet[]>;
+    addMerchant: (data: MerchantDto) => Promise<void>;
+    updateMerchat: (merchantUser: MerchantDto, userCif: string) => Promise<merchantDocumnet[]>;
     deleteMerchant: (userCif: string) => Promise<merchantDocumnet[]>;
 }
 
@@ -16,12 +16,12 @@ export interface DataSource {
 export class JsonFileRepository {
     constructor(private filePath: string) {}
 
-    async getMerchants() : Promise<UserDto[]> {
+    async getMerchants() : Promise<MerchantDto[]> {
         try {
             const data = readFileSync(this.filePath, 'utf-8');
             console.log(data);
             if(data) {
-                const jsonData: UserDto[] = JSON.parse(data) as UserDto[];
+                const jsonData: MerchantDto[] = JSON.parse(data) as MerchantDto[];
                 return jsonData;
             } else {
                 return [];
@@ -38,7 +38,7 @@ export class JsonFileRepository {
         }
     };
 
-    async addMerchant(data: UserDto) : Promise<void> {
+    async addMerchant(data: MerchantDto) : Promise<void> {
         let allData = await this.getMerchants();
         allData.push(data);
         fs.writeFile(this.filePath, JSON.stringify(allData, null, 2), err => {
@@ -46,7 +46,7 @@ export class JsonFileRepository {
         });
     };
 
-    async updateMerchat(merchantUser: UserDto, userCif: string): Promise<UserDto[]> {
+    async updateMerchat(merchantUser: MerchantDto, userCif: string): Promise<MerchantDto[]> {
         try {
             let data = await this.getMerchants();
             const newData = data.filter(user => user.cif !== userCif);
@@ -59,7 +59,7 @@ export class JsonFileRepository {
         }
     };
     
-    async deleteMerchant(userCif: string): Promise<UserDto[]> {
+    async deleteMerchant(userCif: string): Promise<MerchantDto[]> {
         let data = await this.getMerchants();
         if(data.length > 0) {
             const newData = data.filter(user => user.cif !== userCif);

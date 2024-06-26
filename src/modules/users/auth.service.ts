@@ -37,7 +37,7 @@ export class AuthService {
         // is assigned to one user
         const result = await bcrypt.compare(password, user.password);
         
-        if(result !== true) {
+        if(!result) {
             throw new BadRequestException("Incorrect Password");
         }
         const userToken = await this.jwtService.createJwtToken(user); 

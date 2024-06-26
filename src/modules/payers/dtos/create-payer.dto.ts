@@ -1,5 +1,5 @@
 import { IsDefined, IsEmail, IsEnum, IsNumber, IsNumberString, IsPositive, IsString, ValidateNested } from "class-validator";
-import { currency } from "../entity/payer.schema";
+import { currency } from "../entities/payer.schema";
 import { Type } from "class-transformer";
 
 class DeptDto {

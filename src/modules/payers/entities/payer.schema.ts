@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
-import { User } from "./user.schema";
+import { User } from "src/modules/users/entity/user.schema"; 
 import { Merchant } from "../../merchant/entities/merchant.schema";
 import { IsEmail } from "class-validator";
 
