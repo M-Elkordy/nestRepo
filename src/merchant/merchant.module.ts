@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { MerchantController } from './merchant.controller';
 import { MerchantService } from './merchant.service';
+import { MerchantsResolver } from './merchant.resolver';
 
 @Module({
-  controllers: [MerchantController],
-  providers: [MerchantService]
+  controllers: [],
+  providers: [MerchantService, MerchantsResolver]
 })
 export class MerchantModule {}
