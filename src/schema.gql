@@ -1,0 +1,155 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MerchantData {
+  _id: String!
+  cif: String!
+  industry: String!
+  email: String!
+  commercialName: String!
+  countryCode: String!
+  phoneNumber: String!
+}
+
+type Merchants {
+  success: Boolean!
+  data: [MerchantData!]!
+}
+
+type Merchant {
+  success: Boolean!
+  data: MerchantData!
+}
+
+type Dept {
+  amount: Int!
+  currency: String!
+}
+
+type ReturnedPayer {
+  _id: String!
+  fullName: String!
+  email: String!
+  dept: Dept!
+  userId: String!
+  merchantId: String!
+}
+
+type Payer {
+  success: Boolean!
+  data: ReturnedPayer!
+}
+
+type Payers {
+  success: Boolean!
+  data: [ReturnedPayer!]!
+}
+
+type TotalDept {
+  _id: String!
+  totalDept: Int!
+}
+
+type TotalDeptReturn {
+  success: Boolean!
+  data: [TotalDept!]!
+}
+
+type UserObject {
+  email: String!
+  password: String!
+  userName: String!
+  fullName: String!
+  phoneNumber: String!
+  expireTokens: [String!]!
+}
+
+type Users {
+  success: Boolean!
+  data: [UserObject!]!
+}
+
+type User {
+  success: Boolean!
+  data: UserObject!
+}
+
+type UserToken {
+  success: Boolean!
+  data: String!
+}
+
+type SignOutReturn {
+  success: Boolean!
+}
+
+type Query {
+  merchants: Merchants!
+  getPayers(page: Float!, limit: Float!, search: String!): Payers!
+  getTotalDept(cif: String!, fullName: String!): TotalDeptReturn!
+  getUsersByEmail(email: String!): Users!
+  getUserById(id: String!): User!
+}
+
+type Mutation {
+  addMerchant(merchant: MerchantInput!): Merchant!
+  updateMerchant(merchantData: UpdateMerchant!, cif: String!): Merchants!
+  deleteMerchant(cif: String!): Merchants!
+  createPayer(payer: CreatePayer!): Payer!
+  updateUser(id: String!, user: UpdatedUser!): User!
+  deleteUser(id: String!): User!
+  userSignIn(user: SignInUser!): UserToken!
+  userSignUp(user: SignUpUser!): User!
+  userSignOut: SignOutReturn!
+}
+
+input MerchantInput {
+  cif: String!
+  industry: String!
+  email: String!
+  commercialName: String!
+  countryCode: String!
+  phoneNumber: String!
+}
+
+input UpdateMerchant {
+  cif: String!
+  industry: String!
+  email: String!
+  commercialName: String!
+  countryCode: String!
+  phoneNumber: String!
+}
+
+input CreatePayer {
+  fullName: String!
+  email: String!
+  merchantId: String!
+  userId: String!
+  dept: DeptInput!
+}
+
+input DeptInput {
+  amount: Int!
+  currency: String!
+}
+
+input UpdatedUser {
+  email: String!
+  password: String!
+}
+
+input SignInUser {
+  email: String!
+  password: String!
+}
+
+input SignUpUser {
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+  userName: String!
+  fullName: String!
+  phoneNumber: String!
+}
