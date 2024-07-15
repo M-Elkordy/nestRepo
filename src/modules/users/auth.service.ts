@@ -4,9 +4,7 @@ import { randomBytes, scrypt as _scrypt } from "crypto";
 import { promisify } from "util";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { JwtTokenService } from "./jwtToken.service";
-import { InjectModel } from "@nestjs/mongoose";
-import { User } from "./entity/user.schema";
-import { Model } from "mongoose";
+
 const bcrypt = require('bcrypt');
 
 const scrypt = promisify(_scrypt);
@@ -16,6 +14,7 @@ export class AuthService {
     constructor(private usersService: UsersService, private jwtService: JwtTokenService) {}
 
     async signUp(createdUser: CreateUserDto) {
+        console.log(createdUser);
         const users = await this.usersService.find(createdUser.email);
         if(users.length) throw new BadRequestException("Email Was Found");
         if (createdUser.password !== createdUser.passwordConfirmation) {
@@ -34,7 +33,7 @@ export class AuthService {
         if(!user) throw new NotFoundException("User Not Found");
 
         // this.usersService.find(email); should not return array of users because each email 
-        // is assigned to one user
+        // is assigned to one user.
         const result = await bcrypt.compare(password, user.password);
         
         if(!result) {
@@ -42,5 +41,11 @@ export class AuthService {
         }
         const userToken = await this.jwtService.createJwtToken(user); 
         return userToken;
+    }
+
+    async signOut(token: string) {
+        const user = await this.jwtService.extractJwtTokenData(token);
+        const userId = user.id;
+        return this.usersService.addExpireToken(userId, token);
     }
 } 

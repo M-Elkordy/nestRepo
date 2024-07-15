@@ -1,5 +1,4 @@
 import { JwtService } from '@nestjs/jwt';
-import { User } from './user.entity';
 import { Injectable } from '@nestjs/common';
 import { UserDocument } from './entity/user.schema';
 
@@ -8,9 +7,14 @@ export class JwtTokenService {
     constructor(private jwtService: JwtService) {}
 
     async createJwtToken(user: UserDocument) {
-        const payload = { sub: user.id, username: user.email };
+        const payload = { id: user.id, email: user.email };
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
+    }
+
+    async extractJwtTokenData(token: string) {
+        const tokenDecoded = await this.jwtService.decode(token);
+        return tokenDecoded;
     }
 }

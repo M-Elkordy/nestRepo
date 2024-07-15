@@ -1,7 +1,7 @@
 import { Expose } from "class-transformer";
 
 
-export class MerchantDto {
+export class UserDto {
     // @Expose()
     // id: number;
 
@@ -22,4 +22,7 @@ export class MerchantDto {
 
     @Expose()
     phoneNumber: string;
+
+    @Expose()
+    expireTokens?: string[];
 }

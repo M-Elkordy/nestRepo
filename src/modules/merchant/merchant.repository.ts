@@ -3,12 +3,13 @@ import * as fs from 'fs';
 import { MerchantDto } from "./dtos/merchant.dto";
 import { Injectable } from "@nestjs/common";
 import { merchantDocumnet } from "./entities/merchant.schema";
+import { UpdateMerchantDto } from "./dtos/updateMerchant.dto";
 
 
 export interface DataSource {
     getMerchants: () => Promise<merchantDocumnet[]>;
     addMerchant: (data: MerchantDto) => Promise<void>;
-    updateMerchat: (merchantUser: MerchantDto, userCif: string) => Promise<merchantDocumnet[]>;
+    updateMerchat: (merchantUser: UpdateMerchantDto, userCif: string) => Promise<merchantDocumnet[]>;
     deleteMerchant: (userCif: string) => Promise<merchantDocumnet[]>;
 }
 

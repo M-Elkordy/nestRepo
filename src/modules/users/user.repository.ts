@@ -8,8 +8,9 @@ export interface DataSource {
     findOneBy: ( id: string ) => Promise<UserDocument>;
     find: ( email: string ) => Promise<UserDocument[]>;
     create: ( createdUser: CreateUserDto ) => Promise<UserDocument>;
-    updateUser: ( user: UserDocument ) => Promise<void>;
-    remove: (id: string) => void;
+    updateUser: ( id: string, user: UserDocument ) => Promise<UserDocument>;
+    remove: (id: string) => Promise<UserDocument>;
+    updateExpireTokenArray(id: string, token: string): Promise<UserDocument>;
 }
 
 export class UserMongoRepository implements DataSource {
@@ -18,11 +19,16 @@ export class UserMongoRepository implements DataSource {
     ) { }
 
     async findOneBy(id: string) : Promise<UserDocument> {
-        return await this.userModel.findById(id);
+        const user = await this.userModel.findById(id);
+        return user;
     };
 
     async find(email: string) : Promise<UserDocument[]> {
-        return await this.userModel.find( { email: email });
+        let filter = {};
+        if(email)
+            filter = { email: email };
+        const users = await this.userModel.find( filter );
+        return users;
     };
 
     async create(createdUser: CreateUserDto) : Promise<UserDocument> {
@@ -33,16 +39,28 @@ export class UserMongoRepository implements DataSource {
         }
     };
 
-    async updateUser(user: UserDocument) : Promise<void> {
+    async updateUser(id: string, user: UserDocument) : Promise<UserDocument> {
         try {
-            await this.userModel.updateOne({ _id: user._id });
+            await this.userModel.updateOne({ _id: user._id }, user);
+            return await this.findOneBy(id);
         } catch (error) {
             return error;
         }
     };
 
-    async remove(id: string) : Promise<void> {
-        await this.userModel.deleteOne({ _id: id });
+    async remove(id: string) : Promise<any> {
+        return await this.userModel.deleteOne({ _id: id });
     };
 
+    async updateExpireTokenArray(id: string, token: string): Promise<UserDocument> {
+        try {
+            return this.userModel.findByIdAndUpdate(
+                id,
+                { $push: { expireTokens: token }},
+                { new: true }
+            ).exec();
+        } catch (error) {
+            return error;
+        }
+    }
 }

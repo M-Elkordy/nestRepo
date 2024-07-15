@@ -22,8 +22,7 @@ export class PayersController {
 
     @UseGuards(AuthGuard)
     @Get('/auths/totaldebt')
-    getTotalDept(@Query('cif') cif: string, @Query('fullName') fullName: string) {
-        console.log(`${cif}, ${fullName}`);
+    async getTotalDept(@Query('cif') cif: string, @Query('fullName') fullName: string) {
         return this.payersService.getTotalDept(cif, fullName);
     }
 }

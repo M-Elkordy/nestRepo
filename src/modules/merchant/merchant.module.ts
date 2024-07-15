@@ -5,8 +5,10 @@ import { JsonFileRepository } from './merchant.repository';
 import { filePath } from 'src/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoDbRepository } from './merchant.mongodb.repository';
-import { DataSource } from './merchant.repository'
 import { Merchant, MerchantSchema } from './entities/merchant.schema';
+import { UsersService } from '../users/users.service';
+import { JwtTokenService } from '../users/jwtToken.service';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   controllers: [MerchantController],
@@ -18,10 +20,13 @@ import { Merchant, MerchantSchema } from './entities/merchant.schema';
     {
       provide: "DataSource",
       useClass: MongoDbRepository
-    }
+    },
+    UsersService,
+    JwtTokenService
   ],
   imports: [
-    MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema}])
+    MongooseModule.forFeature([{ name: Merchant.name, schema: MerchantSchema}]),
+    UsersModule
   ]
 })
 

@@ -12,11 +12,13 @@ export class User {
     @Prop({ required: true, })
     fullName: String;
     @Prop({ required: true, })
-    phoneNumber: String;
+    phoneNumber: String; 
     @Prop({ required: true, })
     userName: String;
     @Prop({ required: true, })
     password: String;
+    @Prop()
+    expireTokens?: String[];
     @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Payer" }]})
     payer: Payer
     @Prop({ type: mongoose.Schema.Types.ObjectId, ref: "Merchant" })

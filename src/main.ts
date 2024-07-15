@@ -7,6 +7,7 @@ import { ResponseInterceptor } from './modules/merchant/response.interceptor';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { ValidationError } from 'class-validator';
+import * as express from "express";
 const cookieSession = require('cookie-session');
 
 
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.use(cookieSession({
     keys: ["dmmyString"]
   }))
+  app.use(express.json())
   app.useGlobalPipes(
     new ValidationPipe({
       // additional props added to the req ( not mentioned in dto ) are not included to my code. 

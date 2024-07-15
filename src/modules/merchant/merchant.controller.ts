@@ -4,6 +4,7 @@ import { MerchantDto } from './dtos/merchant.dto';
 import { MerchantService } from './merchant.service';
 import { NextFunction, Response } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { UpdateMerchantDto } from './dtos/updateMerchant.dto';
 
 @Controller('merchants')
 @UseGuards(AuthGuard)
@@ -17,16 +18,18 @@ export class MerchantController {
 
     @Post()
     createMerchant(@Body(new CustomValidationPipe())body: MerchantDto) {
+        console.log(body);
         return this.merchantervice.addNewMerchant(body);
     }
 
     @Put("/:cif")
-    updateMerchant(@Body(new CustomValidationPipe())body: MerchantDto, @Param('cif') cif: string) {
+    updateMerchant(@Body(new CustomValidationPipe())body: UpdateMerchantDto, @Param('cif') cif: string) {
         return this.merchantervice.updateMerchantInfo(body, cif);
     } 
 
     @Delete()
     deleteMerchant(@Query('cif') cif: string) {
+        console.log(cif);
         return this.merchantervice.deleteMerchant(cif);
     }
 }

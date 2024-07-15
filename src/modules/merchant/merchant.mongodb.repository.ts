@@ -4,6 +4,7 @@ import { MerchantDto } from "./dtos/merchant.dto";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Merchant, merchantDocumnet } from "./entities/merchant.schema";
+import { UpdateMerchantDto } from "./dtos/updateMerchant.dto";
 
 
 @Injectable()
@@ -18,12 +19,15 @@ export class MongoDbRepository implements DataSource {
     };
 
     async addMerchant(data: MerchantDto) : Promise<void> {
-        console.log(data);
         await this.merchantModel.create(data);
     };
     
-    async updateMerchat(merchantUser: MerchantDto, userCif: string) : Promise<merchantDocumnet[]> {
-        await this.merchantModel.findOneAndUpdate({ cif: userCif }, merchantUser);
+    async updateMerchat(merchantUser: UpdateMerchantDto, userCif: string) : Promise<merchantDocumnet[]> {
+        try {
+            await this.merchantModel.findOneAndUpdate({ cif: userCif }, merchantUser);
+        } catch (error) {
+            return error;
+        }
         return this.getMerchants();
     };
 

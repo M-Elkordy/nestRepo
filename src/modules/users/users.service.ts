@@ -1,9 +1,7 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DataSource } from './user.repository';
+import { UserDto } from './dtos/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,20 +14,23 @@ export class UsersService {
     findOne(id: string) {
         if(!id)
             return null;
-        return this.repo.findOneBy(id);
+        const user = this.repo.findOneBy(id);
+        if(!user)
+            throw new NotFoundException('User Not Found!');
+        return user;
     }
 
     find(email: string) {
         return this.repo.find(email);
     }
 
-    async update(id: string, attrs: Partial<User>) {
+    async update(id: string, attrs: Partial<UserDto>) {
         const user = await this.findOne(id);
         if(!user) {
             throw new NotFoundException('User Not Found!');
         }
         Object.assign(user, attrs);
-        return this.repo.updateUser(user);
+        return this.repo.updateUser(id, user);
     }
 
     async delete(id: string) {
@@ -40,4 +41,16 @@ export class UsersService {
         return this.repo.remove(id);
     }
 
+    async addExpireToken(id: string, token: string) {
+        const user = await this.findOne(id);
+        if(!user) {
+            throw new NotFoundException('User Not Found!');
+        }
+        return this.repo.updateExpireTokenArray(id, token);
+    }
+
+    async getExpireTokens(id: string) {
+        const user = await this.findOne(id);
+        return user.expireTokens;
+    }
 }

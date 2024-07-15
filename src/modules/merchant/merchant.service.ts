@@ -1,6 +1,7 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { MerchantDto } from './dtos/merchant.dto';
 import { DataSource } from './merchant.repository';
+import { UpdateMerchantDto } from './dtos/updateMerchant.dto';
 
 
 @Injectable()
@@ -29,10 +30,14 @@ export class MerchantService {
         return body;    
     }
 
-    async updateMerchantInfo(body: MerchantDto, cif: string) {
+    async updateMerchantInfo(body: UpdateMerchantDto, cif: string) {
         const cifFound = await this.doesCifExists(cif);
         if(!cifFound) throw new BadRequestException("cif entererd does not exist!");
-        this.repo.updateMerchat(body, cif);
+        try {
+            return await this.repo.updateMerchat(body, cif);
+        } catch (error) {
+            return error;
+        }
     }
 
     async deleteMerchant(cif: string) {
