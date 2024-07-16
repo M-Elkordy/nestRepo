@@ -36,6 +36,7 @@ import { UserMongoRepository } from './user.repository';
       provide: 'DataSource',
       useClass: UserMongoRepository
     }
-  ]
+  ],
+  exports: [UsersService]
 })
 export class UsersModule {}

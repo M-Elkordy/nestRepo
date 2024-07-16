@@ -21,7 +21,6 @@ import { UsersModule } from '../users/users.module';
       provide: "DataSource",
       useClass: MongoDbRepository
     },
-    UsersService,
     JwtTokenService
   ],
   imports: [

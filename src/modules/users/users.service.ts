@@ -11,10 +11,11 @@ export class UsersService {
         return this.repo.create(createdUser);
     }
 
-    findOne(id: string) {
+    async findOne(id: string) {
         if(!id)
             return null;
-        const user = this.repo.findOneBy(id);
+
+        const user = await this.repo.findOneBy(id);
         if(!user)
             throw new NotFoundException('User Not Found!');
         return user;
@@ -26,6 +27,7 @@ export class UsersService {
 
     async update(id: string, attrs: Partial<UserDto>) {
         const user = await this.findOne(id);
+        console.log(user);
         if(!user) {
             throw new NotFoundException('User Not Found!');
         }
@@ -50,6 +52,7 @@ export class UsersService {
     }
 
     async getExpireTokens(id: string) {
+        console.log(id);
         const user = await this.findOne(id);
         return user.expireTokens;
     }

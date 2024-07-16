@@ -11,6 +11,7 @@ import { Report } from './reports/report.entity';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PayersModule } from './modules/payers/payers.module';
+import { UsersService } from './modules/users/users.service';
 
 
 @Module({

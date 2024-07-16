@@ -15,6 +15,7 @@ export class MongoDbRepository implements DataSource {
 
     async getMerchants() : Promise<merchantDocumnet[]> {
         const data = await this.merchantModel.find();
+        console.log(data);
         return data;
     };
 

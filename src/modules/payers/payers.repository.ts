@@ -21,6 +21,11 @@ export class PayersMongoRepository {
         const payersCount = await this.payerModel.countDocuments();
         const skip = (page - 1) * limit;
         let query = {};
+        const projectQuery = {
+            $project: {
+                password: 0,
+            }
+        }
         if(search) {
             query = {
                 $or: [
@@ -29,10 +34,10 @@ export class PayersMongoRepository {
                 ]
             }
         }
-        if( skip >= payersCount ) {
+        if( skip >= payersCount && payersCount > 0 ) {
             throw new BadRequestException("no more payers in this page")
         }
-        const data = await this.payerModel.find(query).sort().skip(skip).limit(limit)
+        const data = await this.payerModel.find(query, projectQuery).sort().skip(skip).limit(limit)
         return data;
     }
     
