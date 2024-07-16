@@ -1,6 +1,6 @@
 import { Resolver, Query, Args, Context, Mutation } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { SignInUser, SignOutReturn, SignUpUser, UpdatedUser, User, Users, UserToken } from './models/users.model';
+import { SignInUser, SignOutReturn, SignUpUser, UpdatedUser, UpdateUserInput, User, Users, UserToken } from './models/users.model';
 import { exportJwtTokenFromRequest } from 'src/helpers/jwt-token.helper';
 
 @Resolver()
@@ -23,8 +23,9 @@ export class UsersResolver {
     }
 
     @Mutation(returns => User)
-    async updateUser(@Context() context: any, @Args('id') id: string, @Args('user') user: UpdatedUser) {
+    async updateUser(@Context() context: any, @Args('updateUserInput') updateUserInput: UpdateUserInput) {
         const token = exportJwtTokenFromRequest(context);
+        const { id, user } = updateUserInput;
         return await this.usersService.updateUser(token, id, user);
     }
 

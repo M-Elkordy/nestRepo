@@ -29,6 +29,6 @@ export class Merchants {
     @Field()
     success: boolean;
 
-    @Field(() => [MerchantData])
-    data: MerchantData[]
+    @Field(() => [MerchantData], { nullable: true })
+    data?: MerchantData[]
 }

@@ -6,9 +6,6 @@ export class UserObject {
     email: string;
 
     @Field()
-    password: string;
-
-    @Field()
     userName: string;
 
     @Field()
@@ -17,7 +14,7 @@ export class UserObject {
     @Field()
     phoneNumber: string;
 
-    @Field(() => [String])
+    @Field(() => [String], { nullable: true })
     expireTokens?: string[]
 }
 
@@ -53,16 +50,16 @@ export class User {
     @Field()
     success: boolean;
 
-    @Field(() => UserObject)
+    @Field(() => UserObject, { nullable: true })
     data?: UserObject
 }
 
 @InputType()
 export class UpdatedUser {
-    @Field()
+    @Field(() => String, { nullable: true })
     email?: string;
-
-    @Field()
+    
+    @Field(() => String, { nullable: true })
     password?: string;
 }
 
@@ -109,4 +106,13 @@ export class UserToken {
 export class SignOutReturn {
     @Field()
     success: boolean;
+}
+
+@InputType()
+export class UpdateUserInput {
+    @Field()
+    id: string;
+
+    @Field()
+    user: UpdatedUser
 }

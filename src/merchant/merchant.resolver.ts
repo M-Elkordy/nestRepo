@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, Context } from "@nestjs/graphql";
 import { Merchants } from "./models/getMerchants.model";
 import { MerchantService } from "./merchant.service";
 import { Merchant, MerchantInput } from "./models/createMerchant.model";
-import { UpdateMerchant } from "./models/updateMerchant.model";
+import { UpdateMerchant, UpdateMerchantInput } from "./models/updateMerchant.model";
 import { exportJwtTokenFromRequest } from "src/helpers/jwt-token.helper";
 
 @Resolver(of => Merchants)
@@ -22,9 +22,13 @@ export class MerchantsResolver {
     }
 
     @Mutation(returns => Merchants)
-    async updateMerchant(@Args('merchantData') merchant: UpdateMerchant, @Args('cif') cif: string, @Context() context: any) {
+    async updateMerchant(
+        @Args('updateMerchantInput') updateMerchantInput: UpdateMerchantInput,
+        @Context() context: any
+    ) {
         const jwtToken = exportJwtTokenFromRequest(context);
-        return await this.merchantService.updateMerchant(merchant, cif, jwtToken);
+        const { merchantData, cif } = updateMerchantInput;
+        return await this.merchantService.updateMerchant(merchantData, cif, jwtToken);
     }
 
     @Mutation(returns => Merchants)

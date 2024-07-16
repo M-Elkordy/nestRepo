@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
-import { serviceUrl } from 'src/config/config';
 import { SignInUser, SignUpUser, UpdatedUser } from './models/users.model';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
+    private serviceUrl: string;
+
+    constructor(private configService: ConfigService) {
+        this.serviceUrl = this.configService.get<string>('serviceUrl');
+    }
+
     async getUsersByEmail(token: string, email: string) {
         try {
             const header = {
                 ...(token && { Authorization: token }),
                 'Content-Type': 'application/json',
             }
-            const users = await (await fetch(`${serviceUrl}/auth?email=${email}`, {
+            const users = await (await fetch(`${this.serviceUrl}/auth?email=${email}`, {
                 headers: header,
             })).json();
 
@@ -29,7 +35,7 @@ export class UsersService {
                 ...(token && { Authorization: token }),
                 'Content-Type': 'application/json'
             }
-            const users = await (await fetch(`${serviceUrl}/auth/${id}`, {
+            const users = await (await fetch(`${this.serviceUrl}/auth/${id}`, {
                 headers: header,
             })).json();
 
@@ -45,7 +51,7 @@ export class UsersService {
             const header = {
                 ...(token && { Authorization: token })
             }
-            const users = await (await fetch(`${serviceUrl}/auth/${id}`, {
+            const users = await (await fetch(`${this.serviceUrl}/auth/${id}`, {
                 headers: header,
                 method: 'PUT', // PATCH
                 body: JSON.stringify(user)
@@ -63,7 +69,7 @@ export class UsersService {
             const header = {
                 ...(token && { Authorization: token })
             }
-            const users = await (await fetch(`${serviceUrl}/auth/${id}`, {
+            const users = await (await fetch(`${this.serviceUrl}/auth/${id}`, {
                 headers: header,
                 method: 'DELETE',
             })).json();
@@ -77,7 +83,7 @@ export class UsersService {
 
     async signIn(user: SignInUser) {
         try {
-            const userToken = await (await fetch(`${serviceUrl}/auth/signin/signin`, {
+            const userToken = await (await fetch(`${this.serviceUrl}/auth/signin`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -93,7 +99,7 @@ export class UsersService {
 
     async signUp(user: SignUpUser) {
         try {
-            const users = await (await fetch(`${serviceUrl}/auth/signup`, {
+            const users = await (await fetch(`${this.serviceUrl}/auth/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json',
@@ -110,7 +116,7 @@ export class UsersService {
 
     async signOut(token: string) {
         try {
-            const returnMessage = await (await fetch(`${serviceUrl}/auth/signout`, {
+            const returnMessage = await (await fetch(`${this.serviceUrl}/auth/signout`, {
                 method: 'POST',
             })).json();
 

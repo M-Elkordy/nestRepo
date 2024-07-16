@@ -1,5 +1,5 @@
 import { Resolver, Query, Args, Mutation, Context } from '@nestjs/graphql';
-import { CreatePayer, Payer, Payers, TotalDeptReturn } from './models/payer.model';
+import { CreatePayer, GetPayersInput, GetTotalDeptInput, Payer, Payers, TotalDeptReturn } from './models/payer.model';
 import { PayersService } from './payers.service';
 import { exportJwtTokenFromRequest } from 'src/helpers/jwt-token.helper';
 
@@ -9,22 +9,21 @@ export class PayersResolver {
 
     @Query(returns => Payers)
     async getPayers(
-        @Args('page') page: number, 
-        @Args('limit') limit: number,
+        @Args('getPayersInput') getPayersInput: GetPayersInput, 
         @Context() context: any,
-        @Args('search') search?: string
     ) {
+        const { page, limit, search } = getPayersInput;
         const jwtToken = exportJwtTokenFromRequest(context);
         return await this.payersService.getPayers(page, limit, jwtToken, search); 
     }
 
     @Query(returns => TotalDeptReturn)
     async getTotalDept(
-        @Args('cif') cif: string, 
-        @Args('fullName') fullName: string,
+        @Args('getTotalDeptInput') getTotalDeptInput: GetTotalDeptInput, 
         @Context() context: any,
     ) {
         const jwtToken = exportJwtTokenFromRequest(context);
+        const { cif, fullName } = getTotalDeptInput;
         return await this.payersService.getTotalDept(cif, fullName, jwtToken);
     }
 

@@ -1,15 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { serviceUrl } from 'src/config/config';
 import { CreatePayer } from './models/payer.model';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PayersService {
+    private serviceUrl: string;
+
+    constructor(private configService: ConfigService) {
+        this.serviceUrl = this.configService.get<string>('serviceUrl');
+    }
+
     async getPayers(page: number = 1, limit: number = 5, jwtToken?: string, search?: string) {
         try {
             const headers = {
                 ...(jwtToken && { Authorization: jwtToken })
             };
-            const payersList = await ( await fetch(`${serviceUrl}/payers/auth/payers?page=${page}&limit=${limit}&search=${search}`, {
+            const payersList = await ( await fetch(`${this.serviceUrl}/payers/auth/payers?page=${page}&limit=${limit}&search=${search}`, {
                 headers: headers,
             }) ).json();
             if(!payersList.success) throw new Error(payersList.message);
@@ -24,7 +30,7 @@ export class PayersService {
             const headers = {
                 ...(jwtToken && { Authorization: jwtToken })
             };
-            const totalDept = await ( await fetch(`${serviceUrl}/payers/auths/totaldebt?cif=${cif}&fullName=${fullName}`, {
+            const totalDept = await ( await fetch(`${this.serviceUrl}/payers/auths/totaldebt?cif=${cif}&fullName=${fullName}`, {
                 headers: headers,
             }) ).json();
             if(!totalDept.success) throw new Error(totalDept.message);
@@ -40,7 +46,7 @@ export class PayersService {
                 'Content-Type': 'application/json',
                 ...(jwtToken && { Authorization: jwtToken })
             };
-            const payerCreated = await ( await fetch(`${serviceUrl}/payers/payers`, {
+            const payerCreated = await ( await fetch(`${this.serviceUrl}/payers/payers`, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(payer)

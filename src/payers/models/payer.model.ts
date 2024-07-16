@@ -93,3 +93,23 @@ export class TotalDeptReturn {
     data: TotalDept[];
 }
 
+@InputType()
+export class GetPayersInput {
+    @Field()
+    page: number;
+
+    @Field()
+    limit: number;
+
+    @Field(() => String, { nullable: true })
+    search?: string;
+}
+
+@InputType()
+export class GetTotalDeptInput {
+    @Field()
+    cif: string;
+
+    @Field()
+    fullName: string;
+}

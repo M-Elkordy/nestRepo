@@ -7,6 +7,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { PayersModule } from './payers/payers.module';
 import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import config from './config/config';
 
 @Module({
   imports: [MerchantModule,
@@ -15,7 +17,10 @@ import { UsersModule } from './users/users.module';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql')
     }),
     PayersModule,
-    UsersModule
+    UsersModule,
+    ConfigModule.forRoot({
+      load: [config]
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
